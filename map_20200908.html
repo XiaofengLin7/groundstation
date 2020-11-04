@@ -32,6 +32,7 @@
                 zoom: 15, //初始化地图层级
                 center: [120.08647290353, 30.139236891528] //初始化地图中心点
             });
+            // 无人机的图标设置
             var uav_Icon_1 = new AMap.Icon({
             // 图标尺寸
                 size: new AMap.Size(512, 512),
@@ -53,6 +54,7 @@
             // 图标取图偏移量
                imageOffset: new AMap.Pixel(-3, -3)
            });
+            // 设置原点
             var marker_org_loc = new AMap.Marker({
                 position: new AMap.LngLat(120.08647290353, 30.139236891528),
             });
@@ -62,18 +64,20 @@
             var marker_lon_plus1 = new AMap.Marker({
                 position: new AMap.LngLat(121.08647290353, 30.139236891528),
             });
+            // 计算在原点位置往正东正北方向的每增加一米的经纬度
             var meters_per_lat = AMap.GeometryUtil.distance(marker_org_loc.getPosition(), marker_lat_plus1.getPosition());
             var meters_per_lon = AMap.GeometryUtil.distance(marker_org_loc.getPosition(), marker_lon_plus1.getPosition());
 
             var lat_per_meter = 1 / meters_per_lat;
             var log_per_meter = 1 / meters_per_lon;
+            
             // 将创建的点标记添加到已有的地图实例：
 
 
-            var m210_id = 16;
-            var m300_id = 4;
-
-           
+            var m210_id = 16; // zigbee id 0x10
+            var m300_id = 4;  // zigbee id 0x04
+            var flash_distance_threshold = 0.2; //   单位/m
+           //在原点处设置飞机的marker
             var marker_m210 = new AMap.Marker({
                 position: new AMap.LngLat(120.08647290353, 30.139236891528),
                 icon: uav_Icon_1,
@@ -82,7 +86,9 @@
                 position: new AMap.LngLat(120.08647290353, 30.139236891528),
                 icon: uav_Icon_2,
             });
-        
+            
+            
+
             var starter_m210 = new Array(new AMap.LngLat("120.08647290353", "30.139236891528"));
             var starter_m300 = new Array(new AMap.LngLat("120.08647290353", "30.139236891528"));
             var position = [120.08647290353, 30.139236891528];
@@ -96,98 +102,100 @@
             map.add(marker_m210);
             map.add(marker_m300);
         
-        window.onload = function () {
-            if (typeof parent.qt != 'undefined') {
-                new QWebChannel(window.qt.webChannelTransport, function (channel) {
-                    var webobj = channel.objects.webobj;
-
-                    webobj.dataChanged.connect(function (arg) {
-                        if (arg.drone_id == m210_id) 
-                        {
-                            var dist_prev = (arg.x - temp_210_x) * (arg.x - temp_210_x) + (arg.y - temp_210_y) * (arg.y - temp_210_y);
-                            if(dist_prev > 0.04){
-                                new_lat = lat_per_meter * Number(arg.x) + Number(position.slice(1, 2));
-
-                                new_lon = log_per_meter * Number(arg.y) + Number(position.slice(0, 1));
-                                marker_m210.setMap(null);
-                                marker_m210 = new AMap.Marker({
-                                position: new AMap.LngLat(new_lon.toString(), new_lat.toString()),
-                                    //icon: uav_Icon_1,
-                                    color:"#28F",
-                                });
-                                map.add(marker_m210);
-                            
-                                starter_m210.push(new AMap.LngLat(new_lon.toString(), new_lat.toString()));
-  //                              if(starter_m210.length() > 50)
-  //                              {
-   //                                 starter_m210.shift();
-    //                            }
-                                var polyline_m210 = new AMap.Polyline({
-                                    map: map,
-                                    path: starter_m210,
-                                    showDir: true,
-                                    strokeColor: "#28F",  //线颜色
-                                // strokeOpacity: 1,     //线透明度
-                                    strokeWeight: 6,      //线宽
-                 // strokeStyle: "solid"  //线样式
-                                }); 
-                                polyline_m210.setMap(map);
-                                temp_210_x = arg.x;
-                                temp_210_y = arg.y;
-                            }
-                            
-                        }
-                        if (arg.drone_id == m300_id ) 
-                        {
-                            var dist_prev = (arg.x-temp_300_x) * (arg.x - temp_300_x) + (arg.y-temp_300_y) * (arg.y - temp_300_y);
-                            if(dist_prev > 0.04){
-                                 new_lat = lat_per_meter * Number(arg.x) + Number(position.slice(1, 2));
-
-                                new_lon = log_per_meter * Number(arg.y) + Number(position.slice(0, 1));
-                                marker_m300.setMap(null);
-                                marker_m300 = new AMap.Marker({
+            window.onload = function () {
+                if (typeof parent.qt != 'undefined') {
+                    new QWebChannel(window.qt.webChannelTransport, function (channel) {
+                        var webobj = channel.objects.webobj;
+    
+                        webobj.dataChanged.connect(function (arg) {
+                            if (arg.drone_id == m210_id) 
+                            {   
+                                //计算与上一次刷新的距离
+                                var dist_between_flash = Math.sqrt((arg.x - temp_210_x) * (arg.x - temp_210_x) + (arg.y - temp_210_y) * (arg.y - temp_210_y));
+                                if(dist_between_flash > flash_distance_threshold){
+                                    new_lat = lat_per_meter * Number(arg.x) + Number(position.slice(1, 2));
+    
+                                    new_lon = log_per_meter * Number(arg.y) + Number(position.slice(0, 1));                                    
+                                    marker_m210.setMap(null);
+                                    marker_m210 = new AMap.Marker({
                                     position: new AMap.LngLat(new_lon.toString(), new_lat.toString()),
-                                    //icon: uav_Icon_2,
-                                    color:"#72a"
-                                });
-                                map.add(marker_m300);
-
-                                starter_m300.push(new AMap.LngLat(new_lon.toString(), new_lat.toString()));
-  //                              if(starter_m300.length() > 50)
-   //                             {
-    //                                starter_m300.shift();
-    //                            }
-                                var polyline_m300 = new AMap.Polyline({
-                                    map: map,
-                                    path: starter_m300,
-                                    showDir: true,
-                                    strokeColor: "#72a",  //线颜色
-                                    // strokeOpacity: 1,     //线透明度
-                                    strokeWeight: 6,      //线宽
-                    // strokeStyle: "solid"  //线样式
+                                        //icon: uav_Icon_1,
+                                        color:"#28F",
                                     });
-                                polyline_m300.setMap(map);
-                                temp_300_x = arg.x;
-                                temp_300_y = arg.y;
+                                    map.add(marker_m210);
+                                
+                                    starter_m210.push(new AMap.LngLat(new_lon.toString(), new_lat.toString()));
+  //                                  if(starter_m210.length() > 50)
+  //                                  {
+   //                                     starter_m210.shift();
+    //                                }
+                                    var polyline_m210 = new AMap.Polyline({
+                                        map: map,
+                                        path: starter_m210,
+                                        showDir: true,
+                                        strokeColor: "#28F",  //线颜色
+                                    // strokeOpacity: 1,     //线透明度
+                                        strokeWeight: 6,      //线宽
+                                    // strokeStyle: "solid"  //线样式
+                                    }); 
+                                    polyline_m210.setMap(map);
+                                    temp_210_x = arg.x;
+                                    temp_210_y = arg.y;
+                                }
+                                
                             }
-                           
-                        }
-
-
-
-                        x.innerHTML = "x:" + arg.x;
-                        y.innerHTML = "y:" + arg.y;
-                        drone_id.innerHTML = "drone_id:" + arg.drone_id;
-                       // temp_300_x = arg.x;
-                       // temp_300_y = arg.y;
+                            if (arg.drone_id == m300_id ) 
+                            {
+                                var dist_between_flash = Math.sqrt((arg.x-temp_300_x) * (arg.x - temp_300_x) + (arg.y-temp_300_y) * (arg.y - temp_300_y));
+                                if(dist_between_flash > flash_distance_threshold){
+                                     new_lat = lat_per_meter * Number(arg.x) + Number(position.slice(1, 2));
+    
+                                    new_lon = log_per_meter * Number(arg.y) + Number(position.slice(0, 1));
+                                    marker_m300.setMap(null);
+                                    marker_m300 = new AMap.Marker({
+                                        position: new AMap.LngLat(new_lon.toString(), new_lat.toString()),
+                                        //icon: uav_Icon_2,
+                                        color:"#72a"
+                                    });
+                                    map.add(marker_m300);
+    
+                                    starter_m300.push(new AMap.LngLat(new_lon.toString(), new_lat.toString()));
+  //                                  if(starter_m300.length() > 50)
+   //                                 {
+    //                                    starter_m300.shift();
+    //                                }
+                                    var polyline_m300 = new AMap.Polyline({
+                                        map: map,
+                                        path: starter_m300,
+                                        showDir: true,
+                                        strokeColor: "#72a",  //线颜色
+                                        // strokeOpacity: 1,     //线透明度
+                                        strokeWeight: 6,      //线宽
+                        // strokeStyle: "solid"  //线样式
+                                        });
+                                    polyline_m300.setMap(map);
+                                    temp_300_x = arg.x;
+                                    temp_300_y = arg.y;
+                                }
+                               
+                            }
+    
+    
+    
+                            x.innerHTML = "x:" + arg.x;
+                            y.innerHTML = "y:" + arg.y;
+                            drone_id.innerHTML = "drone_id:" + arg.drone_id;
+                           // temp_300_x = arg.x;
+                           // temp_300_y = arg.y;
+                        });
+    
                     });
-
-                });
+                }
+                else {
+                    alert("qt对象获取失败！");
+                }
             }
-            else {
-                alert("qt对象获取失败！");
-            }
-        }
+            
         AMap.plugin('AMap.ToolBar', function () {
             var toolbar = new AMap.ToolBar();
             map.addControl(toolbar);
