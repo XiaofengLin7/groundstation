@@ -67,7 +67,7 @@ public:
     QVBoxLayout *verticalLayout_6;
     QLabel *uav1_x;
     QLabel *uav1_y;
-    QLabel *uav_z;
+    QLabel *uav1_z;
     QVBoxLayout *verticalLayout_3;
     QTextBrowser *text_uav1_x;
     QTextBrowser *text_uav1_y;
@@ -79,24 +79,6 @@ public:
     QVBoxLayout *verticalLayout_11;
     QTextBrowser *text_uav1_vx;
     QTextBrowser *text_uav1_vy;
-    QWidget *horizontalLayoutWidget_6;
-    QHBoxLayout *horizontalLayout_9;
-    QHBoxLayout *horizontalLayout_10;
-    QVBoxLayout *verticalLayout_7;
-    QLabel *uav2_x;
-    QLabel *uav2_y;
-    QLabel *uav2_z;
-    QVBoxLayout *verticalLayout_8;
-    QTextBrowser *text_uav2_x;
-    QTextBrowser *text_uav2_y;
-    QTextBrowser *text_uav2_z;
-    QHBoxLayout *horizontalLayout_11;
-    QVBoxLayout *verticalLayout_12;
-    QLabel *uav2_vx;
-    QLabel *uav2_vy;
-    QVBoxLayout *verticalLayout_13;
-    QTextBrowser *text_uav2_vx;
-    QTextBrowser *text_uav2_vy;
     QPushButton *pushButton_takeoff;
     QPushButton *pushButton_start;
     QPushButton *pushButton_exit;
@@ -111,6 +93,24 @@ public:
     QHBoxLayout *horizontalLayout_12;
     QPushButton *pushButton_send_org_loc;
     QTextEdit *textEdit_altitude;
+    QWidget *horizontalLayoutWidget_6;
+    QHBoxLayout *horizontalLayout_9;
+    QHBoxLayout *horizontalLayout_10;
+    QVBoxLayout *verticalLayout_7;
+    QLabel *uav2_x;
+    QLabel *uav2_z;
+    QLabel *uav2_y;
+    QVBoxLayout *verticalLayout_8;
+    QTextBrowser *text_uav2_x;
+    QTextBrowser *text_uav2_y;
+    QTextBrowser *text_uav2_z;
+    QHBoxLayout *horizontalLayout_11;
+    QVBoxLayout *verticalLayout_12;
+    QLabel *uav2_vx;
+    QLabel *uav2_vy;
+    QVBoxLayout *verticalLayout_13;
+    QTextBrowser *text_uav2_vx;
+    QTextBrowser *text_uav2_vy;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -124,7 +124,7 @@ public:
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         texttest = new QTextBrowser(centralWidget);
         texttest->setObjectName(QString::fromUtf8("texttest"));
-        texttest->setGeometry(QRect(900, 420, 191, 81));
+        texttest->setGeometry(QRect(910, 430, 191, 81));
         texttest->setReadOnly(false);
         pushButton_send = new QPushButton(centralWidget);
         pushButton_send->setObjectName(QString::fromUtf8("pushButton_send"));
@@ -294,7 +294,7 @@ public:
 
         horizontalLayoutWidget_5 = new QWidget(centralWidget);
         horizontalLayoutWidget_5->setObjectName(QString::fromUtf8("horizontalLayoutWidget_5"));
-        horizontalLayoutWidget_5->setGeometry(QRect(620, 10, 391, 281));
+        horizontalLayoutWidget_5->setGeometry(QRect(620, 10, 391, 111));
         horizontalLayout_8 = new QHBoxLayout(horizontalLayoutWidget_5);
         horizontalLayout_8->setSpacing(6);
         horizontalLayout_8->setContentsMargins(11, 11, 11, 11);
@@ -316,10 +316,10 @@ public:
 
         verticalLayout_6->addWidget(uav1_y);
 
-        uav_z = new QLabel(horizontalLayoutWidget_5);
-        uav_z->setObjectName(QString::fromUtf8("uav_z"));
+        uav1_z = new QLabel(horizontalLayoutWidget_5);
+        uav1_z->setObjectName(QString::fromUtf8("uav1_z"));
 
-        verticalLayout_6->addWidget(uav_z);
+        verticalLayout_6->addWidget(uav1_z);
 
 
         horizontalLayout_5->addLayout(verticalLayout_6);
@@ -386,9 +386,70 @@ public:
 
         horizontalLayout_8->addLayout(horizontalLayout_7);
 
+        pushButton_takeoff = new QPushButton(centralWidget);
+        pushButton_takeoff->setObjectName(QString::fromUtf8("pushButton_takeoff"));
+        pushButton_takeoff->setGeometry(QRect(1020, 120, 93, 28));
+        pushButton_start = new QPushButton(centralWidget);
+        pushButton_start->setObjectName(QString::fromUtf8("pushButton_start"));
+        pushButton_start->setGeometry(QRect(1020, 170, 93, 28));
+        pushButton_exit = new QPushButton(centralWidget);
+        pushButton_exit->setObjectName(QString::fromUtf8("pushButton_exit"));
+        pushButton_exit->setGeometry(QRect(1020, 230, 93, 28));
+        pushButton_land = new QPushButton(centralWidget);
+        pushButton_land->setObjectName(QString::fromUtf8("pushButton_land"));
+        pushButton_land->setGeometry(QRect(1020, 280, 93, 28));
+        gridLayoutWidget = new QWidget(centralWidget);
+        gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
+        gridLayoutWidget->setGeometry(QRect(660, 520, 441, 277));
+        gridLayout = new QGridLayout(gridLayoutWidget);
+        gridLayout->setSpacing(6);
+        gridLayout->setContentsMargins(11, 11, 11, 11);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        gridLayout->setContentsMargins(0, 0, 0, 0);
+        textEdit_longitude = new QTextEdit(gridLayoutWidget);
+        textEdit_longitude->setObjectName(QString::fromUtf8("textEdit_longitude"));
+
+        gridLayout->addWidget(textEdit_longitude, 1, 1, 1, 1);
+
+        label_latitude = new QLabel(gridLayoutWidget);
+        label_latitude->setObjectName(QString::fromUtf8("label_latitude"));
+
+        gridLayout->addWidget(label_latitude, 0, 0, 1, 1);
+
+        label_longitude = new QLabel(gridLayoutWidget);
+        label_longitude->setObjectName(QString::fromUtf8("label_longitude"));
+
+        gridLayout->addWidget(label_longitude, 1, 0, 1, 1);
+
+        textEdit_latitude = new QTextEdit(gridLayoutWidget);
+        textEdit_latitude->setObjectName(QString::fromUtf8("textEdit_latitude"));
+
+        gridLayout->addWidget(textEdit_latitude, 0, 1, 1, 1);
+
+        label_altitude = new QLabel(gridLayoutWidget);
+        label_altitude->setObjectName(QString::fromUtf8("label_altitude"));
+
+        gridLayout->addWidget(label_altitude, 2, 0, 1, 1);
+
+        horizontalLayout_12 = new QHBoxLayout();
+        horizontalLayout_12->setSpacing(6);
+        horizontalLayout_12->setObjectName(QString::fromUtf8("horizontalLayout_12"));
+
+        gridLayout->addLayout(horizontalLayout_12, 0, 2, 1, 1);
+
+        pushButton_send_org_loc = new QPushButton(gridLayoutWidget);
+        pushButton_send_org_loc->setObjectName(QString::fromUtf8("pushButton_send_org_loc"));
+
+        gridLayout->addWidget(pushButton_send_org_loc, 1, 2, 1, 1);
+
+        textEdit_altitude = new QTextEdit(gridLayoutWidget);
+        textEdit_altitude->setObjectName(QString::fromUtf8("textEdit_altitude"));
+
+        gridLayout->addWidget(textEdit_altitude, 2, 1, 1, 1);
+
         horizontalLayoutWidget_6 = new QWidget(centralWidget);
         horizontalLayoutWidget_6->setObjectName(QString::fromUtf8("horizontalLayoutWidget_6"));
-        horizontalLayoutWidget_6->setGeometry(QRect(620, 120, 391, 281));
+        horizontalLayoutWidget_6->setGeometry(QRect(620, 140, 391, 121));
         horizontalLayout_9 = new QHBoxLayout(horizontalLayoutWidget_6);
         horizontalLayout_9->setSpacing(6);
         horizontalLayout_9->setContentsMargins(11, 11, 11, 11);
@@ -405,15 +466,15 @@ public:
 
         verticalLayout_7->addWidget(uav2_x);
 
-        uav2_y = new QLabel(horizontalLayoutWidget_6);
-        uav2_y->setObjectName(QString::fromUtf8("uav2_y"));
-
-        verticalLayout_7->addWidget(uav2_y);
-
         uav2_z = new QLabel(horizontalLayoutWidget_6);
         uav2_z->setObjectName(QString::fromUtf8("uav2_z"));
 
         verticalLayout_7->addWidget(uav2_z);
+
+        uav2_y = new QLabel(horizontalLayoutWidget_6);
+        uav2_y->setObjectName(QString::fromUtf8("uav2_y"));
+
+        verticalLayout_7->addWidget(uav2_y);
 
 
         horizontalLayout_10->addLayout(verticalLayout_7);
@@ -480,67 +541,6 @@ public:
 
         horizontalLayout_9->addLayout(horizontalLayout_11);
 
-        pushButton_takeoff = new QPushButton(centralWidget);
-        pushButton_takeoff->setObjectName(QString::fromUtf8("pushButton_takeoff"));
-        pushButton_takeoff->setGeometry(QRect(1020, 120, 93, 28));
-        pushButton_start = new QPushButton(centralWidget);
-        pushButton_start->setObjectName(QString::fromUtf8("pushButton_start"));
-        pushButton_start->setGeometry(QRect(1020, 170, 93, 28));
-        pushButton_exit = new QPushButton(centralWidget);
-        pushButton_exit->setObjectName(QString::fromUtf8("pushButton_exit"));
-        pushButton_exit->setGeometry(QRect(1020, 230, 93, 28));
-        pushButton_land = new QPushButton(centralWidget);
-        pushButton_land->setObjectName(QString::fromUtf8("pushButton_land"));
-        pushButton_land->setGeometry(QRect(1020, 280, 93, 28));
-        gridLayoutWidget = new QWidget(centralWidget);
-        gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(660, 520, 441, 277));
-        gridLayout = new QGridLayout(gridLayoutWidget);
-        gridLayout->setSpacing(6);
-        gridLayout->setContentsMargins(11, 11, 11, 11);
-        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        gridLayout->setContentsMargins(0, 0, 0, 0);
-        textEdit_longitude = new QTextEdit(gridLayoutWidget);
-        textEdit_longitude->setObjectName(QString::fromUtf8("textEdit_longitude"));
-
-        gridLayout->addWidget(textEdit_longitude, 1, 1, 1, 1);
-
-        label_latitude = new QLabel(gridLayoutWidget);
-        label_latitude->setObjectName(QString::fromUtf8("label_latitude"));
-
-        gridLayout->addWidget(label_latitude, 0, 0, 1, 1);
-
-        label_longitude = new QLabel(gridLayoutWidget);
-        label_longitude->setObjectName(QString::fromUtf8("label_longitude"));
-
-        gridLayout->addWidget(label_longitude, 1, 0, 1, 1);
-
-        textEdit_latitude = new QTextEdit(gridLayoutWidget);
-        textEdit_latitude->setObjectName(QString::fromUtf8("textEdit_latitude"));
-
-        gridLayout->addWidget(textEdit_latitude, 0, 1, 1, 1);
-
-        label_altitude = new QLabel(gridLayoutWidget);
-        label_altitude->setObjectName(QString::fromUtf8("label_altitude"));
-
-        gridLayout->addWidget(label_altitude, 2, 0, 1, 1);
-
-        horizontalLayout_12 = new QHBoxLayout();
-        horizontalLayout_12->setSpacing(6);
-        horizontalLayout_12->setObjectName(QString::fromUtf8("horizontalLayout_12"));
-
-        gridLayout->addLayout(horizontalLayout_12, 0, 2, 1, 1);
-
-        pushButton_send_org_loc = new QPushButton(gridLayoutWidget);
-        pushButton_send_org_loc->setObjectName(QString::fromUtf8("pushButton_send_org_loc"));
-
-        gridLayout->addWidget(pushButton_send_org_loc, 1, 2, 1, 1);
-
-        textEdit_altitude = new QTextEdit(gridLayoutWidget);
-        textEdit_altitude->setObjectName(QString::fromUtf8("textEdit_altitude"));
-
-        gridLayout->addWidget(textEdit_altitude, 2, 1, 1, 1);
-
         QtGuiApplication1Class->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(QtGuiApplication1Class);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -599,14 +599,9 @@ public:
         label_3->setText(QApplication::translate("QtGuiApplication1Class", " GPS_Altitude:", nullptr));
         uav1_x->setText(QApplication::translate("QtGuiApplication1Class", "uav1_x", nullptr));
         uav1_y->setText(QApplication::translate("QtGuiApplication1Class", "uav1_y", nullptr));
-        uav_z->setText(QApplication::translate("QtGuiApplication1Class", "uav1_z", nullptr));
+        uav1_z->setText(QApplication::translate("QtGuiApplication1Class", "uav1_z", nullptr));
         uav1_vx->setText(QApplication::translate("QtGuiApplication1Class", "uav1_vx", nullptr));
         uav1_vy->setText(QApplication::translate("QtGuiApplication1Class", "uav1_vy", nullptr));
-        uav2_x->setText(QApplication::translate("QtGuiApplication1Class", "uav2_x", nullptr));
-        uav2_y->setText(QApplication::translate("QtGuiApplication1Class", "uav2_y", nullptr));
-        uav2_z->setText(QApplication::translate("QtGuiApplication1Class", "uav2_z", nullptr));
-        uav2_vx->setText(QApplication::translate("QtGuiApplication1Class", "uav2_vx", nullptr));
-        uav2_vy->setText(QApplication::translate("QtGuiApplication1Class", "uav2_vy", nullptr));
         pushButton_takeoff->setText(QApplication::translate("QtGuiApplication1Class", "takeoff", nullptr));
         pushButton_start->setText(QApplication::translate("QtGuiApplication1Class", "start", nullptr));
         pushButton_exit->setText(QApplication::translate("QtGuiApplication1Class", "exit", nullptr));
@@ -615,6 +610,11 @@ public:
         label_longitude->setText(QApplication::translate("QtGuiApplication1Class", "longitude", nullptr));
         label_altitude->setText(QApplication::translate("QtGuiApplication1Class", "altitude", nullptr));
         pushButton_send_org_loc->setText(QApplication::translate("QtGuiApplication1Class", "send original location", nullptr));
+        uav2_x->setText(QApplication::translate("QtGuiApplication1Class", "uav2_x", nullptr));
+        uav2_z->setText(QApplication::translate("QtGuiApplication1Class", "uav2_z", nullptr));
+        uav2_y->setText(QApplication::translate("QtGuiApplication1Class", "uav2_y", nullptr));
+        uav2_vx->setText(QApplication::translate("QtGuiApplication1Class", "uav2_vx", nullptr));
+        uav2_vy->setText(QApplication::translate("QtGuiApplication1Class", "uav2_vy", nullptr));
     } // retranslateUi
 
 };
