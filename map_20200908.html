@@ -20,6 +20,21 @@
 <p id="y">y:</p>
 <p id="drone_id">drone_id:</p>
 
+
+ <table id = "data of drones"> 
+    <tr>
+        <td id= "first_x"> x: </td>
+        <td id= "first_y"> y: </td>
+        <td id = "first_drone_id"> drone_id: </td>
+    </tr>
+    <tr>
+        <td id= "second_x"> x: </td>
+        <td id= "second_y"> y: </td>
+        <td id ="second_drone_id"> drone_id: </td>
+    </tr>
+    
+    </table>
+    
 <!-- 加载地图JSAPI脚本 -->
 <body>
     <div id="container"></div>
@@ -141,6 +156,10 @@
                                     polyline_m210.setMap(map);
                                     temp_210_x = arg.x;
                                     temp_210_y = arg.y;
+                                    first_x.innerHTML = arg.x;
+                                    first_y.innerHTML = arg.y;
+                                    first_drone_id.innerHTML = arg.drone_id;
+                                    
                                 }
                                 
                             }
@@ -176,6 +195,9 @@
                                     polyline_m300.setMap(map);
                                     temp_300_x = arg.x;
                                     temp_300_y = arg.y;
+                                    second_x.innerHTML = arg.x;
+                                    second_y.innerHTML = arg.y;
+                                    second_drone_id.innerHTML = arg.drone_id;
                                 }
                                
                             }
