@@ -1,0 +1,90 @@
+int main(int argc, char *argv[])
+{
+	QApplication a(argc, argv);
+    //qDebug()<<QDir::currentPath();
+    //QFileInfo jsFileInfo(QDir::currentPath() + "/qwebchannel.js");
+    //if (!jsFileInfo.exists())
+    //{
+    //    QFile::copy(":/qtwebchannel/qwebchannel.js", jsFileInfo.absoluteFilePath());
+    //  
+    //        qDebug() <<" !";
+    //}
+    //
+    // setup the QWebSocketServer
+ //  QWebSocketServer server(QStringLiteral("QWebChannel Standalone Example Server"), QWebSocketServer::NonSecureMode);
+  //  if (!server.listen(QHostAddress::LocalHost, 12445)) {
+  //      qFatal("Failed to open web socket server.");
+ //       return 1;
+ //   }
+  // uav_Pos_Info* webobj = new uav_Pos_Info();
+//    QPushButton* btn = new QPushButton("..");
+//    QObject::connect(btn, &QPushButton::clicked, this,
+//        [&]() {
+
+            
+            
+ //       });
+
+            //QWebChannel* webChannel = new QWebChannel();
+
+
+ //   uav_pos pos_test(1, 3);
+    // wrap WebSocket clients in QWebChannelAbstractTransport objects
+  //  WebSocketClientWrapper clientWrapper(&server);
+    
+    // setup the channel
+    //QWebChannel channel;
+    //channel.registerObject(QStringLiteral("w"), &w);
+   // QWebChannel webChannel;
+ //   QObject::connect(&clientWrapper, &WebSocketClientWrapper::clientConnected,
+   //     &webChannel, &QWebChannel::connectTo);
+ //   QtGuiApplication1 w;
+  //  uav_Pos_Info webobj;
+   // QJsonObject json;
+    //json.insert("x", "Qt");
+    //json.insert("y", 1991);
+    //json.insert("Cross Platform", true);
+
+
+   // webobj.setProperty("jsonData", json);
+
+    //webChannel.registerObject("webobj", &webobj);
+   // w.Web_View->page()->setWebChannel(&webChannel);
+
+    //Web_View = new QWebEngineView(this);
+    //w.Web_View->setUrl(QUrl("C:/Users/iusl/Desktop/QtGuiApplication1/map1.html"));
+   /* w.Web_View->load(QUrl("C:/Users/iusl/Desktop/QtGuiApplication1/map_20200908.html"));
+    w.Web_View->setGeometry(370, 180, 450, 450);
+
+    w.Web_View->show();
+
+	w.show();*/
+    QWebSocketServer server(QStringLiteral("QWebChannel Standalone Example Server"), QWebSocketServer::NonSecureMode);
+    if (!server.listen(QHostAddress::LocalHost, 12445)) {
+        qFatal("Failed to open web socket server.");
+        return 1;
+    }
+
+    // wrap WebSocket clients in QWebChannelAbstractTransport objects
+    WebSocketClientWrapper clientWrapper(&server);
+
+    // setup the channel
+//    QWebChannel channel;
+//    QObject::connect(&clientWrapper, &WebSocketClientWrapper::clientConnected,
+//                     &channel, &QWebChannel::connectTo);
+
+    QWebChannel webChannel;
+    QObject::connect(&clientWrapper, &WebSocketClientWrapper::clientConnected,
+        &webChannel, &QWebChannel::connectTo);
+    //   QtGuiApplication1 w;
+    uav_Pos_Info webobj;
+    QJsonObject json;
+    json.insert("x", "Qt");
+    json.insert("y", 1991);
+    json.insert("Cross Platform", true);
+
+    webobj.setProperty("jsonData", json);
+
+    webChannel.registerObject(QStringLiteral("webobj"), &webobj);
+	return a.exec();
+}
