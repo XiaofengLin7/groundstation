@@ -23,7 +23,7 @@
 #include <QTimer>
 //#include <C:\Users\iusl\Desktop\QtGuiApplication1\QtGuiApplication1\uav_Pos_Info.h>
 //#include <../QtWebView/qwebview_global.h>
-const int action_send_times = 10;
+const int action_send_times = 20;
 const int action_delay_time = 100;
 const char M210_ID = 0x10;
 const char M300_ID = 0x04;

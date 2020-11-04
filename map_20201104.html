@@ -1,0 +1,177 @@
+﻿
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+
+    <title>地图显示</title>
+    <style>
+        html,
+        body,
+        #container {
+          width: 100%;
+          height: 100%;
+        }
+    </style>
+</head>
+<p id="x">x:</p>
+<p id="y">y:</p>
+<p id="drone_id">drone_id:</p>
+
+<!-- 加载地图JSAPI脚本 -->
+<body>
+    <div id="container"></div>
+    <script type="text/javascript" src="./qwebchannel.js"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=7cc18594633036fcf5155ceef21d3b33"></script>
+    <script type="text/javascript">
+        
+            var map = new AMap.Map('container', {
+                resizeEnable: true, //是否监控地图容器尺寸变化
+                zoom: 15, //初始化地图层级
+                center: [120.08647290353, 30.139236891528] //初始化地图中心点
+            });
+            var uav_Icon_1 = new AMap.Icon({
+            // 图标尺寸
+                size: new AMap.Size(512, 512),
+            // 图标的取图地址
+                image: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1600333827167&di=f63eaafbbba8e69c1969191a874641c8&imgtype=0&src=http%3A%2F%2Fpic.51yuansu.com%2Fpic2%2Fcover%2F00%2F34%2F05%2F581146cbcbb4a_610.jpg',
+            // 图标所用图片大小
+                imageSize: new AMap.Size(45, 45),
+            // 图标取图偏移量
+               imageOffset: new AMap.Pixel(-3, -3)
+           });
+            var uav_Icon_2 = new AMap.Icon({
+            // 图标尺寸
+                size: new AMap.Size(512, 512),
+            // 图标的取图地址
+
+               image: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1600333827166&di=54156538f282eb619de2f63755cb58ce&imgtype=0&src=http%3A%2F%2Fpic.51yuansu.com%2Fpic2%2Fcover%2F00%2F36%2F57%2F5811dbd3a35b3_610.jpg',
+            // 图标所用图片大小
+                imageSize: new AMap.Size(45, 45),
+            // 图标取图偏移量
+               imageOffset: new AMap.Pixel(-3, -3)
+           });
+            var marker_org_loc = new AMap.Marker({
+                position: new AMap.LngLat(120.08647290353, 30.139236891528),
+            });
+            var marker_lat_plus1 = new AMap.Marker({
+                position: new AMap.LngLat(120.08647290353, 31.139236891528),
+            });
+            var marker_lon_plus1 = new AMap.Marker({
+                position: new AMap.LngLat(121.08647290353, 30.139236891528),
+            });
+            var meters_per_lat = AMap.GeometryUtil.distance(marker_org_loc.getPosition(), marker_lat_plus1.getPosition());
+            var meters_per_lon = AMap.GeometryUtil.distance(marker_org_loc.getPosition(), marker_lon_plus1.getPosition());
+
+            var lat_per_meter = 1 / meters_per_lat;
+            var log_per_meter = 1 / meters_per_lon;
+            console.log(lat_per_meter);
+            console.log(log_per_meter);
+            // 将创建的点标记添加到已有的地图实例：
+
+
+
+           
+            var marker_m210 = new AMap.Marker({
+                position: new AMap.LngLat(120.08647290353, 30.139236891528),
+                icon: uav_Icon_1,
+            });
+            var marker_m300 = new AMap.Marker({ 
+                position: new AMap.LngLat(120.08647290353, 30.139236891528),
+                icon: uav_Icon_2,
+            });
+        
+            var starter_m210 = new Array(new AMap.LngLat("120.08647290353", "30.139236891528"));
+            var starter_m300 = new Array(new AMap.LngLat("120.08647290353", "30.139236891528"));
+            var position = [120.08647290353, 30.139236891528];
+            var temp_x, temp_y;
+            var new_lon, new_lat;
+            map.add(marker_org_loc);
+            map.add(marker_m210);
+            map.add(marker_m300);
+            var m210_id = 16; //OX10
+            var m300_id = 4;  //0X04
+
+        window.onload = function () {
+            if (typeof parent.qt != 'undefined') {
+                new QWebChannel(window.qt.webChannelTransport, function (channel) {
+                    var webobj = channel.objects.webobj;
+
+                    webobj.dataChanged.connect(function (arg) {
+                        if (arg.drone_id == m210_id && (arg.x != temp_x || arg.y != temp_y)) {
+                            new_lat = lat_per_meter * Number(arg.x) + Number(position.slice(1, 2));
+                            new_lon = log_per_meter * Number(arg.y) + Number(position.slice(0, 1));
+                            
+                            marker_m210.setMap(null);
+                            marker_m210 = new AMap.Marker({
+                                position: new AMap.LngLat(new_lon.toString(), new_lat.toString()),
+                                icon: uav_Icon_1,
+                            });
+                            map.add(marker_m210);
+                            
+                            starter_m210.push(new AMap.LngLat(new_lon.toString(), new_lat.toString()));
+                            var polyline_m210 = new AMap.Polyline({
+                                map: map,
+                                path: starter_m210,
+                                showDir: true,
+                                strokeColor: "#28F",  //线颜色
+                                // strokeOpacity: 1,     //线透明度
+                                strokeWeight: 6,      //线宽
+                 // strokeStyle: "solid"  //线样式
+                            }); 
+                            polyline_m210.setMap(map);
+                        }
+                        if (arg.drone_id == m300_id && (arg.x != temp_x || arg.y != temp_y)) {
+                            new_lat = lat_per_meter * Number(arg.x) + Number(position.slice(1, 2));
+                            new_lon = log_per_meter * Number(arg.y) + Number(position.slice(0, 1));
+                            
+                            marker_m300.setMap(null);
+                            marker_m300 = new AMap.Marker({
+                                position: new AMap.LngLat(new_lon.toString(), new_lat.toString()),
+                                icon: uav_Icon_2,
+                            });
+                            map.add(marker_m300);
+
+                            starter_m300.push(new AMap.LngLat(new_lon.toString(), new_lat.toString()));
+                            var polyline_m300 = new AMap.Polyline({
+                                map: map,
+                                path: starter_m300,
+                                showDir: true,
+                                strokeColor: "#72a",  //线颜色
+                                // strokeOpacity: 1,     //线透明度
+                                strokeWeight: 6,      //线宽
+                 // strokeStyle: "solid"  //线样式
+                                });
+                            polyline_m300.setMap(map);
+                        }
+
+
+
+                        x.innerHTML = "x:" + arg.x;
+                        y.innerHTML = "y:" + arg.y;
+                        drone_id.innerHTML = "drone_id:" + arg.drone_id;
+                        temp_x = arg.x;
+                        temp_y = arg.y;
+                    });
+
+                });
+            }
+            else {
+                alert("qt对象获取失败！");
+            }
+        }
+        
+        
+        AMap.plugin('AMap.ToolBar', function () {
+            var toolbar = new AMap.ToolBar();
+            map.addControl(toolbar);
+        });
+
+    </script>
+
+
+</body>
+</html>
+

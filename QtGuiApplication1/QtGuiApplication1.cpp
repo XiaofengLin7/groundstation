@@ -28,7 +28,7 @@ QtGuiApplication1::QtGuiApplication1(QWidget *parent)
     QtGuiApplication1::test();
 
     QWebEngineView* Web_View = new QWebEngineView(parent);
-    Web_View->load(QUrl("C:/Users/iusl/Desktop/QtGuiApplication1/map_20200908.html"));
+    Web_View->load(QUrl("C:/Users/iusl/Desktop/QtGuiApplication1/map_20201104.html"));
     
     webChannel = new QWebChannel;
     webobj = new uav_Pos_Info();
@@ -178,60 +178,61 @@ void QtGuiApplication1::ser_close()
 }
 inline double QtGuiApplication1::decode(int data1, int data2, int data3, int data4)
 {
+
     double result = data1 * 256 * 256 + data2 * 256 + data3 - 1000000;
-    result += (result > 0 ? data4 / 100 : - data4 / 100);
+    result += (result > 0 ? (double)data4 / 100 : - (double)data4 / 100);
     return result;
 }
 void QtGuiApplication1::serialPort_readyRead()
 {
-    /**/
     // 方法1
     QByteArray tem = this->serial.read(1);
- //   qDebug() << tem.at(0);
     if (tem.at(0) == '\xed')
     {
         QByteArray num = this->serial.read(1);
-
         int tem_num = this->serial.bytesAvailable();
-        if( tem_num > 24){
-        if (num.at(0) == '\x14' )
-        {
-            int tem_num = this->serial.bytesAvailable();
-            qDebug() << tem_num;
-            QByteArray data_real = this->serial.readAll();
-            this->serial.clear();
-            //delay(50);
-            double x = decode((int)data_real.at(2), (int)data_real.at(3), (int)data_real.at(4), (int)data_real.at(5));
-            qDebug() << "x:" << x << " ";
-            //qDebug() << data_real.at(6).toInt();
-            double y = decode(data_real.at(6), data_real.at(7), data_real.at(8), data_real.at(9));
-            double z = decode(data_real.at(10), data_real.at(11), data_real.at(12), data_real.at(13));
-            double vx = decode(data_real.at(14), data_real.at(15), data_real.at(16), data_real.at(17));
-            double vy = decode(data_real.at(18), data_real.at(19), data_real.at(20), data_real.at(21));
-            double drone_id = data_real.at(22) * 256 + data_real.at(23);
-            //pass data to html
-            QJsonObject json;
-            json.insert("x", x);
-            json.insert("y", y);
-            json.insert("drone_id", drone_id);
+        if( tem_num >= 24){
+            if (num.at(0) == '\x14' )
+            {
+                QByteArray data = this->serial.read(24);   //读24个字节
+                this->serial.clear();       // 清空缓存
+                QVector<int> data_int;  // 将data转成int，保存到data_real中
+                QString data_str = (QString)data.toHex();
+                QByteArray data_byte = data_str.toUtf8();
+                for (size_t i = 0; i < 48; i += 2)
+                {
+                    bool ok;
+                    data_int.append(data_byte.mid(i, 2).toInt(&ok, 16));
+                }
+                //delay(10);
+                double x = decode(data_int.at(2), data_int.at(3), data_int.at(4), data_int.at(5));
+                double y = decode(data_int.at(6), data_int.at(7), data_int.at(8), data_int.at(9));
+                double z = decode(data_int.at(10), data_int.at(11), data_int.at(12), data_int.at(13));
+                double vx = decode(data_int.at(14), data_int.at(15), data_int.at(16), data_int.at(17));
+                double vy = decode(data_int.at(18), data_int.at(19), data_int.at(20), data_int.at(21));
+                double drone_id = data_int.at(22) * 256 + data_int.at(23);
+                //pass data to html
+                QJsonObject json;
+                json.insert("x", x);
+                json.insert("y", y);
+                json.insert("drone_id", drone_id);
 
-            //           qDebug() << data_real.at(24);
-            webobj->setProperty("jsonData", json);
+                webobj->setProperty("jsonData", json);
 
-            // show position data and velocity data on  GUI
-            ui.text_uav1_x->clear();
-            ui.text_uav1_x->append(QString::number(x));
-            ui.text_uav1_y->clear();
-            ui.text_uav1_y->append(QString::number(y));
-            ui.text_uav1_z->clear();
-            ui.text_uav1_z->append(QString::number(z));
-            ui.text_uav1_vx->clear();
-            ui.text_uav1_vx->append(QString::number(vx));
-            ui.text_uav1_vy->clear();
-            ui.text_uav1_vy->append(QString::number(vy));
+                // show position data and velocity data on  GUI
+                ui.text_uav1_x->clear();
+                ui.text_uav1_x->append(QString::number(x));
+                ui.text_uav1_y->clear();
+                ui.text_uav1_y->append(QString::number(y));
+                ui.text_uav1_z->clear();
+                ui.text_uav1_z->append(QString::number(z));
+                ui.text_uav1_vx->clear();
+                ui.text_uav1_vx->append(QString::number(vx));
+                ui.text_uav1_vy->clear();
+                ui.text_uav1_vy->append(QString::number(vy));
 
+            }
         }
-    }
     }
     /*
     //从接收缓冲区中读取数据

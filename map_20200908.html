@@ -16,7 +16,7 @@
         }
     </style>
 </head>
-<p id="x">x:</p>
+<p id="x">x:</p> 
 <p id="y">y:</p>
 <p id="drone_id">drone_id:</p>
 
@@ -70,8 +70,8 @@
             // 将创建的点标记添加到已有的地图实例：
 
 
-            var m210_id = "10";
-            var m300_id = "f4";
+            var m210_id = 16;
+            var m300_id = 4;
 
            
             var marker_m210 = new AMap.Marker({
@@ -86,7 +86,11 @@
             var starter_m210 = new Array(new AMap.LngLat("120.08647290353", "30.139236891528"));
             var starter_m300 = new Array(new AMap.LngLat("120.08647290353", "30.139236891528"));
             var position = [120.08647290353, 30.139236891528];
-            var temp_x, temp_y;
+            var temp_210_x, temp_210_y,temp_300_x, temp_300_y;
+            temp_210_x = 0;
+            temp_210_y = 0;
+            temp_300_x = 0;
+            temp_300_y = 0;
             var new_lon, new_lat;
             map.add(marker_org_loc);
             map.add(marker_m210);
@@ -98,51 +102,75 @@
                     var webobj = channel.objects.webobj;
 
                     webobj.dataChanged.connect(function (arg) {
-                        if (arg.drone_id == m210_id && (arg.x != temp_x || arg.y != temp_y)) {
-                            new_lat = lat_per_meter * Number(arg.x) + Number(position.slice(1, 2));
+                        if (arg.drone_id == m210_id) 
+                        {
+                            var dist_prev = (arg.x - temp_210_x) * (arg.x - temp_210_x) + (arg.y - temp_210_y) * (arg.y - temp_210_y);
+                            if(dist_prev > 0.04){
+                                new_lat = lat_per_meter * Number(arg.x) + Number(position.slice(1, 2));
 
-                            new_lon = log_per_meter * Number(arg.y) + Number(position.slice(0, 1));
-                            marker_m210.setMap(null);
-                            marker_m210 = new AMap.Marker({
+                                new_lon = log_per_meter * Number(arg.y) + Number(position.slice(0, 1));
+                                marker_m210.setMap(null);
+                                marker_m210 = new AMap.Marker({
                                 position: new AMap.LngLat(new_lon.toString(), new_lat.toString()),
-                                icon: uav_Icon_1,
-                            });
-                            map.add(marker_m210);
-                            
-                            starter_m210.push(new AMap.LngLat(new_lon.toString(), new_lat.toString()));
-                            var polyline_m210 = new AMap.Polyline({
-                                map: map,
-                                path: starter_m210,
-                                showDir: true,
-                                strokeColor: "#28F",  //线颜色
-                                // strokeOpacity: 1,     //线透明度
-                                strokeWeight: 6,      //线宽
-                 // strokeStyle: "solid"  //线样式
-                            }); 
-                            polyline_m210.setMap(map);
-                        }
-                        if (arg.drone_id == m300_id && (arg.x != temp_x || arg.y != temp_y)) {
-                            new_lat = lat_per_meter * Number(arg.x) + Number(position.slice(1, 2));
-
-                            new_lon = log_per_meter * Number(arg.y) + Number(position.slice(0, 1));
-                            marker_m300.setMap(null);
-                            marker_m300 = new AMap.Marker({
-                                position: new AMap.LngLat(new_lon.toString(), new_lat.toString()),
-                                icon: uav_Icon_2,
-                            });
-                            map.add(marker_m300);
-
-                            starter_m300.push(new AMap.LngLat(new_lon.toString(), new_lat.toString()));
-                            var polyline_m300 = new AMap.Polyline({
-                                map: map,
-                                path: starter_m300,
-                                showDir: true,
-                                strokeColor: "#72a",  //线颜色
-                                // strokeOpacity: 1,     //线透明度
-                                strokeWeight: 6,      //线宽
-                 // strokeStyle: "solid"  //线样式
+                                    //icon: uav_Icon_1,
+                                    color:"#28F",
                                 });
-                            polyline_m300.setMap(map);
+                                map.add(marker_m210);
+                            
+                                starter_m210.push(new AMap.LngLat(new_lon.toString(), new_lat.toString()));
+  //                              if(starter_m210.length() > 50)
+  //                              {
+   //                                 starter_m210.shift();
+    //                            }
+                                var polyline_m210 = new AMap.Polyline({
+                                    map: map,
+                                    path: starter_m210,
+                                    showDir: true,
+                                    strokeColor: "#28F",  //线颜色
+                                // strokeOpacity: 1,     //线透明度
+                                    strokeWeight: 6,      //线宽
+                 // strokeStyle: "solid"  //线样式
+                                }); 
+                                polyline_m210.setMap(map);
+                                temp_210_x = arg.x;
+                                temp_210_y = arg.y;
+                            }
+                            
+                        }
+                        if (arg.drone_id == m300_id ) 
+                        {
+                            var dist_prev = (arg.x-temp_300_x) * (arg.x - temp_300_x) + (arg.y-temp_300_y) * (arg.y - temp_300_y);
+                            if(dist_prev > 0.04){
+                                 new_lat = lat_per_meter * Number(arg.x) + Number(position.slice(1, 2));
+
+                                new_lon = log_per_meter * Number(arg.y) + Number(position.slice(0, 1));
+                                marker_m300.setMap(null);
+                                marker_m300 = new AMap.Marker({
+                                    position: new AMap.LngLat(new_lon.toString(), new_lat.toString()),
+                                    //icon: uav_Icon_2,
+                                    color:"#72a"
+                                });
+                                map.add(marker_m300);
+
+                                starter_m300.push(new AMap.LngLat(new_lon.toString(), new_lat.toString()));
+  //                              if(starter_m300.length() > 50)
+   //                             {
+    //                                starter_m300.shift();
+    //                            }
+                                var polyline_m300 = new AMap.Polyline({
+                                    map: map,
+                                    path: starter_m300,
+                                    showDir: true,
+                                    strokeColor: "#72a",  //线颜色
+                                    // strokeOpacity: 1,     //线透明度
+                                    strokeWeight: 6,      //线宽
+                    // strokeStyle: "solid"  //线样式
+                                    });
+                                polyline_m300.setMap(map);
+                                temp_300_x = arg.x;
+                                temp_300_y = arg.y;
+                            }
+                           
                         }
 
 
@@ -150,8 +178,8 @@
                         x.innerHTML = "x:" + arg.x;
                         y.innerHTML = "y:" + arg.y;
                         drone_id.innerHTML = "drone_id:" + arg.drone_id;
-                        temp_x = arg.x;
-                        temp_y = arg.y;
+                       // temp_300_x = arg.x;
+                       // temp_300_y = arg.y;
                     });
 
                 });
