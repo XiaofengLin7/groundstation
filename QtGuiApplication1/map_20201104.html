@@ -32,6 +32,16 @@
                 zoom: 15, //初始化地图层级
                 center: [120.08647290353, 30.139236891528] //初始化地图中心点
             });
+            var satellite = new AMap.TileLayer.Satellite({
+                map: map,
+                zIndex: 12,
+                opacity: 0.8
+            });
+            var roadNetLayer = new AMap.TileLayer.RoadNet({
+                map: map,
+                zIndex: 18,
+                opacity: 0.8
+            });
             var uav_Icon_1 = new AMap.Icon({
             // 图标尺寸
                 size: new AMap.Size(512, 512),

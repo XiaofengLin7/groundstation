@@ -27,20 +27,23 @@ QtGuiApplication1::QtGuiApplication1(QWidget *parent)
     ui.comboBox_baud_rate->setCurrentIndex(3);
     QtGuiApplication1::test();
 
-    QWebEngineView* Web_View = new QWebEngineView(parent);
-    Web_View->load(QUrl("C:/Users/iusl/Desktop/QtGuiApplication1/map_20201104.html"));
+    QWebEngineView* Web_View = new QWebEngineView(this);
+    Web_View->show();
+    Web_View->load(QUrl(QDir::currentPath()+"/map_20201104.html"));
     
     webChannel = new QWebChannel;
     webobj = new uav_Pos_Info();
     
-
+   // ui.Web_View = new QWebEngineView(parent);
+   // ui.Web_View->load(QUrl("C:/Users/iusl/Desktop/QtGuiApplication1/map_20201104.html"));
     
     webChannel->registerObject(QStringLiteral("webobj"), webobj);
 
     Web_View->page()->setWebChannel(webChannel);
    
- //   ui.Web_View->setGeometry(370, 180, 450, 450); 
-    Web_View->show();
+    Web_View->setGeometry(10, height()/4, width()/2, height()/2); 
+    qDebug() << QDir::currentPath();
+
 
 }
 void QtGuiApplication1::test()

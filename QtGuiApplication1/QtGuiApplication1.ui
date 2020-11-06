@@ -17,8 +17,8 @@
    <widget class="QTextBrowser" name="texttest">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>430</y>
+      <x>720</x>
+      <y>630</y>
       <width>191</width>
       <height>81</height>
      </rect>
@@ -37,8 +37,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="pushButton_send">
     <property name="geometry">
      <rect>
-      <x>1020</x>
-      <y>60</y>
+      <x>730</x>
+      <y>480</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -53,7 +53,7 @@ p, li { white-space: pre-wrap; }
       <x>10</x>
       <y>10</y>
       <width>601</width>
-      <height>279</height>
+      <height>141</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -285,170 +285,13 @@ p, li { white-space: pre-wrap; }
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>330</y>
-      <width>601</width>
-      <height>611</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_6">
-     <item>
-      <widget class="QTextBrowser" name="text_rec">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_5">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>10</y>
-      <width>391</width>
-      <height>111</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_8">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_6">
-         <item>
-          <widget class="QLabel" name="uav1_x">
-           <property name="text">
-            <string>uav1_x</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="uav1_y">
-           <property name="text">
-            <string>uav1_y</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="uav1_z">
-           <property name="text">
-            <string>uav1_z</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <item>
-          <widget class="QTextBrowser" name="text_uav1_x"/>
-         </item>
-         <item>
-          <widget class="QTextBrowser" name="text_uav1_y"/>
-         </item>
-         <item>
-          <widget class="QTextBrowser" name="text_uav1_z"/>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_7">
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_10">
-         <item>
-          <widget class="QLabel" name="uav1_vx">
-           <property name="text">
-            <string>uav1_vx</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="uav1_vy">
-           <property name="text">
-            <string>uav1_vy</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_11">
-         <item>
-          <widget class="QTextBrowser" name="text_uav1_vx"/>
-         </item>
-         <item>
-          <widget class="QTextBrowser" name="text_uav1_vy"/>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QPushButton" name="pushButton_takeoff">
-    <property name="geometry">
-     <rect>
-      <x>1020</x>
-      <y>120</y>
-      <width>93</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>takeoff</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_start">
-    <property name="geometry">
-     <rect>
-      <x>1020</x>
-      <y>170</y>
-      <width>93</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>start</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_exit">
-    <property name="geometry">
-     <rect>
-      <x>1020</x>
-      <y>230</y>
-      <width>93</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>exit</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_land">
-    <property name="geometry">
-     <rect>
-      <x>1020</x>
-      <y>280</y>
-      <width>93</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>land</string>
-    </property>
-   </widget>
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>660</x>
-      <y>520</y>
-      <width>441</width>
-      <height>277</height>
+      <x>620</x>
+      <y>300</y>
+      <width>401</width>
+      <height>141</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -494,60 +337,113 @@ p, li { white-space: pre-wrap; }
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget_6">
+   <widget class="QTextBrowser" name="text_rec">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>710</y>
+      <width>621</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>850</x>
+      <y>480</y>
+      <width>160</width>
+      <height>135</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_9">
+     <item>
+      <widget class="QPushButton" name="pushButton_takeoff">
+       <property name="text">
+        <string>takeoff</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_start">
+       <property name="text">
+        <string>start</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_exit">
+       <property name="text">
+        <string>exit</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_land">
+       <property name="text">
+        <string>land</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_2">
     <property name="geometry">
      <rect>
       <x>620</x>
-      <y>140</y>
-      <width>391</width>
-      <height>121</height>
+      <y>10</y>
+      <width>401</width>
+      <height>271</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_9">
+    <layout class="QVBoxLayout" name="verticalLayout_14">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_10">
+      <layout class="QHBoxLayout" name="horizontalLayout_9">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_7">
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
          <item>
-          <widget class="QLabel" name="uav2_x">
-           <property name="text">
-            <string>uav2_x</string>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <widget class="QLabel" name="uav2_x">
+             <property name="text">
+              <string>uav2_x</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="uav2_z">
+             <property name="text">
+              <string>uav2_z</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="uav2_y">
+             <property name="text">
+              <string>uav2_y</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="uav2_z">
-           <property name="text">
-            <string>uav2_z</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="uav2_y">
-           <property name="text">
-            <string>uav2_y</string>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <item>
+            <widget class="QTextBrowser" name="text_uav2_x"/>
+           </item>
+           <item>
+            <widget class="QTextBrowser" name="text_uav2_y"/>
+           </item>
+           <item>
+            <widget class="QTextBrowser" name="text_uav2_z"/>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_8">
-         <item>
-          <widget class="QTextBrowser" name="text_uav2_x"/>
-         </item>
-         <item>
-          <widget class="QTextBrowser" name="text_uav2_y"/>
-         </item>
-         <item>
-          <widget class="QTextBrowser" name="text_uav2_z"/>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_11">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_12">
          <item>
@@ -567,12 +463,107 @@ p, li { white-space: pre-wrap; }
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_13">
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
          <item>
-          <widget class="QTextBrowser" name="text_uav2_vx"/>
+          <layout class="QVBoxLayout" name="verticalLayout_13">
+           <item>
+            <widget class="QTextBrowser" name="text_uav2_vx"/>
+           </item>
+           <item>
+            <widget class="QTextBrowser" name="text_uav2_vy"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>938</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QLabel" name="uav1_x">
+             <property name="text">
+              <string>uav1_x</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="uav1_y">
+             <property name="text">
+              <string>uav1_y</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="uav1_z">
+             <property name="text">
+              <string>uav1_z</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QTextBrowser" name="text_uav2_vy"/>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QTextBrowser" name="text_uav1_x"/>
+           </item>
+           <item>
+            <widget class="QTextBrowser" name="text_uav1_y"/>
+           </item>
+           <item>
+            <widget class="QTextBrowser" name="text_uav1_z"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_10">
+           <item>
+            <widget class="QLabel" name="uav1_vy">
+             <property name="text">
+              <string>uav1_vy</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="uav1_vx">
+             <property name="text">
+              <string>uav1_vx</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_11">
+           <item>
+            <widget class="QTextBrowser" name="text_uav1_vx"/>
+           </item>
+           <item>
+            <widget class="QTextBrowser" name="text_uav1_vy"/>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
