@@ -1,7 +1,6 @@
 #include "QtGuiApplication1.h"
 
-#include<QDebug>
-#include <QElapsedTimer>
+
 
 
 QtGuiApplication1::QtGuiApplication1(QWidget *parent)
@@ -19,7 +18,7 @@ QtGuiApplication1::QtGuiApplication1(QWidget *parent)
     QObject::connect(ui.pushButton_exit, SIGNAL(clicked()), this, SLOT(uav_exit()));
     QObject::connect(ui.pushButton_land, SIGNAL(clicked()), this, SLOT(uav_land()));
     QObject::connect(ui.pushButton_send_org_loc, SIGNAL(clicked()), this, SLOT(send_org_location()));
-
+    QObject::connect(ui.altitude_control, SIGNAL(clicked()), this, SLOT(uav_altitude_test()));
     //数据清除
     QObject::connect(ui.pushButton_clear,SIGNAL(clicked()),ui.text_rec,SLOT(clear()));
 
@@ -42,9 +41,6 @@ QtGuiApplication1::QtGuiApplication1(QWidget *parent)
     Web_View->page()->setWebChannel(webChannel);
    
     Web_View->setGeometry(10, height()/4, width()/2, height()/2); 
-    qDebug() << QDir::currentPath();
-
-
 }
 void QtGuiApplication1::test()
 {
@@ -179,171 +175,80 @@ void QtGuiApplication1::ser_close()
     ui.pushButton_serial_port_close->setEnabled(0);
     ui.PushButton_serial_port_open->setEnabled(1);
 }
-inline double QtGuiApplication1::decode(int data1, int data2, int data3, int data4)
-{
 
-    double result = data1 * 256 * 256 + data2 * 256 + data3 - 1000000;
-    result += (result > 0 ? (double)data4 / 100 : - (double)data4 / 100);
-    return result;
-}
 void QtGuiApplication1::serialPort_readyRead()
 {
     // 方法1
     QByteArray tem = this->serial.read(1);
-    if (tem.at(0) == '\xed')
-    {
-        QByteArray num = this->serial.read(1);
-        int tem_num = this->serial.bytesAvailable();
-        if( tem_num >= 24){
-            if (num.at(0) == '\x14' )
-            {
-                QByteArray data = this->serial.read(24);   //读24个字节
-                this->serial.clear();       // 清空缓存
-                QVector<int> data_int;  // 将data转成int，保存到data_real中
-                QString data_str = (QString)data.toHex();
-                QByteArray data_byte = data_str.toUtf8();
-                for (size_t i = 0; i < 48; i += 2)
+    if (!tem.isNull()) {   
+        if (tem.at(0) == '\xed')
+        {
+            QByteArray num = this->serial.read(1);
+            int tem_num = this->serial.bytesAvailable();
+            if (tem_num >= 24) {
+                if (num.at(0) == '\x14')
                 {
-                    bool ok;
-                    data_int.append(data_byte.mid(i, 2).toInt(&ok, 16));
+                    QByteArray data = this->serial.read(24);   //读24个字节
+                    this->serial.clear();       // 清空缓存
+                    QVector<int> data_int;  // 将data转成int，保存到data_real中
+                    QString data_str = (QString)data.toHex();
+                    QByteArray data_byte = data_str.toUtf8();
+                    for (size_t i = 0; i < 48; i += 2)
+                    {
+                        bool ok;
+                        data_int.append(data_byte.mid(i, 2).toInt(&ok, 16));
+                    }
+
+                    double x = decode(data_int.begin() + 2);
+                    double y = decode(data_int.begin() + 6);
+                    double z = decode(data_int.begin() + 10);
+                    double vx = decode(data_int.begin() + 14);
+                    double vy = decode(data_int.begin() + 18);
+                    QString drone_id = (QString)data.toHex().mid(44, 4);
+
+                    //pass data to html
+                    QJsonObject json;
+                    json.insert("x", x);
+                    json.insert("y", y);
+                    json.insert("drone_id", drone_id);
+                    webobj->setProperty("jsonData", json);
+                    // show position data and velocity data on  GUI
+                    if (drone_id == "0004") {
+
+                        ui.text_uav1_x->clear();
+                        ui.text_uav1_x->append(QString::number(x));
+                        ui.text_uav1_y->clear();
+                        ui.text_uav1_y->append(QString::number(y));
+                        ui.text_uav1_z->clear();
+                        ui.text_uav1_z->append(QString::number(z));
+                        ui.text_uav1_vx->clear();
+                        ui.text_uav1_vx->append(QString::number(vx));
+                        ui.text_uav1_vy->clear();
+                        ui.text_uav1_vy->append(QString::number(vy));
+                    }
+                    if (drone_id == "0010") {
+                        ui.text_uav2_x->clear();
+                        ui.text_uav2_x->append(QString::number(x));
+                        ui.text_uav2_y->clear();
+                        ui.text_uav2_y->append(QString::number(y));
+                        ui.text_uav2_z->clear();
+                        ui.text_uav2_z->append(QString::number(z));
+                        ui.text_uav2_vx->clear();
+                        ui.text_uav2_vx->append(QString::number(vx));
+                        ui.text_uav2_vy->clear();
+                        ui.text_uav2_vy->append(QString::number(vy));
+                    }
                 }
-                //delay(10);
-                double x = decode(data_int.at(2), data_int.at(3), data_int.at(4), data_int.at(5));
-                double y = decode(data_int.at(6), data_int.at(7), data_int.at(8), data_int.at(9));
-                double z = decode(data_int.at(10), data_int.at(11), data_int.at(12), data_int.at(13));
-                double vx = decode(data_int.at(14), data_int.at(15), data_int.at(16), data_int.at(17));
-                double vy = decode(data_int.at(18), data_int.at(19), data_int.at(20), data_int.at(21));
-                double drone_id = data_int.at(22) * 256 + data_int.at(23);
-                //pass data to html
-                QJsonObject json;
-                json.insert("x", x);
-                json.insert("y", y);
-                json.insert("drone_id", drone_id);
-
-                webobj->setProperty("jsonData", json);
-
-                // show position data and velocity data on  GUI
-                ui.text_uav1_x->clear();
-                ui.text_uav1_x->append(QString::number(x));
-                ui.text_uav1_y->clear();
-                ui.text_uav1_y->append(QString::number(y));
-                ui.text_uav1_z->clear();
-                ui.text_uav1_z->append(QString::number(z));
-                ui.text_uav1_vx->clear();
-                ui.text_uav1_vx->append(QString::number(vx));
-                ui.text_uav1_vy->clear();
-                ui.text_uav1_vy->append(QString::number(vy));
-
             }
         }
-    }
-    /*
-    //从接收缓冲区中读取数据
-    QByteArray buffer = this->serial.read(1);
-    //从界面中读取以前收到的数据
-    QString recv = ui.text_rec->toPlainText();
-    QString buff_str;
-    if (!buffer.isEmpty())
-    {
-        data_received.append(buffer);
-        if (data_received.contains('\xed'))
-        {
-            buff_str += (QString)data_received.split('\xed').at(0).toHex();
-            data_received = data_received.right(data_received.length() - data_received.indexOf('\xed') - 1);
-        }
- //       qDebug() << data_received;
-        if (buff_str.length() == 25 * 2)
-        {
-            QVector<double> data_real;
-            QByteArray data = buff_str.toUtf8();
-            serial.clear();
-            for (size_t i = 0; i < data.length(); i += 2)
-            {
-                QByteArray element = data.mid(i, 2);
-                bool ok;
-                data_real.append(element.toInt(&ok, 16));
-                
-            }
-            qDebug() << data;
-            //得到数据的来源            
-            QString drone_id = (QString) data.mid(23, 2);
-            //qDebug() << drone_id;
-
-            double x = decode(data_real.at(3), data_real.at(4), data_real.at(5), data_real.at(6));
-            double y = decode(data_real.at(7), data_real.at(8), data_real.at(9), data_real.at(10));
-            double z = decode(data_real.at(11), data_real.at(12), data_real.at(13), data_real.at(14));
-            double vx = decode(data_real.at(15), data_real.at(16), data_real.at(17), data_real.at(18));
-            double vy = decode(data_real.at(19), data_real.at(20), data_real.at(21), data_real.at(22));
-            qDebug() << "x:" << x<<" ";
-
-            
-
-            //pass data to html
-            QJsonObject json;
-            json.insert("x", x);
-            json.insert("y", y);
-            json.insert("drone_id", drone_id);
-
- //           qDebug() << data_real.at(24);
-            webobj->setProperty("jsonData", json);
-            
-            // show position data and velocity data on  GUI
-            ui.text_uav1_x->clear();
-            ui.text_uav1_x->append(QString::number(x));
-            ui.text_uav1_y->clear();
-            ui.text_uav1_y->append(QString::number(y));
-            ui.text_uav1_z->clear();
-            ui.text_uav1_z->append(QString::number(z));
-            ui.text_uav1_vx->clear();
-            ui.text_uav1_vx->append(QString::number(vx));
-            ui.text_uav1_vy->clear();
-            ui.text_uav1_vy->append(QString::number(vy));
-        }
-        
-
-    }
     
-    QString strDis;
-    for (int i = 0; i < buff_str.length(); i += 2)
-    {
-        QString str = buff_str.mid(i, 2);
-        strDis += str;
-        strDis += " ";
     }
-    recv += strDis;
-    ui.text_rec->clear();
-    ui.text_rec->append(recv);
-    */
+
+ 
 }
 
 
-    //QString recv = ui.text_rec->toPlainText();
-    ////判断是否用hex显示
-    //if (ui.checkBox_hex->isChecked())
-    //{
-    //    QString buff_str = buffer.toHex().toUpper();
-    //    QString strDis;
-    //    for (int i = 0; i < buff_str.length(); i += 2)//填加空格
-    //    {
-    //        QString st = buff_str.mid(i, 2);
-    //        strDis += st;
-    //        strDis += " ";
-    //    }
-    //    recv += strDis;
-    //    ui.text_rec->clear();
-    //    ui.text_rec->append(recv);
-    //}
-    //else
-    //{
-    //    recv += QString(buffer);
-    //    ui.text_rec->clear();
-    //    ui.text_rec->append(recv);
-    //}
 
-
-    //
-    //清空以前的显示
-    //重新显示
 void QtGuiApplication1::uav_start() {
     QByteArray bytes;
     bytes.resize(5);
@@ -405,12 +310,43 @@ void QtGuiApplication1::uav_land() {
         delay(action_delay_time);
     }
 }
+//不给x,y方向的控制，只控制高度方向。
+void QtGuiApplication1::uav_altitude_test() {
+    QByteArray bytes;
+    bytes.resize(24);
+    bytes[0] = 0xED;
+    bytes[1] = 0x14;
+    bytes[2] = 0x00;
+    bytes[3] = M300_ID;
+
+    QVector<int> zero_encode = encode(0);
+
+    for (int i = 0; i < 20 ; i++) {
+    
+        bytes[4 + i] = zero_encode.at(i % 4 );
+    
+    }
+    double altitude = ui.text_Edit_altitude_control->toPlainText().toDouble();
+    QVector<int> altitude_encode = encode( - altitude );
+
+    for (int i = 0; i < 4; i++) {
+
+        bytes[12 + i] = altitude_encode.at(i);
+
+    }
+    for (size_t i = 0; i < action_send_times; i++)
+    {
+        serial.write(bytes);
+        qDebug() << bytes.toHex() << endl;
+        delay(action_delay_time);
+    }
+}
 
 void QtGuiApplication1::send_org_location() {
     //read oringinal location data
-    double org_latitude = ui.textEdit_latitude->toPlainText().toDouble()+10000;
-    double org_longitude = ui.textEdit_longitude->toPlainText().toDouble()+10000;
-    double org_altitude = ui.textEdit_altitude->toPlainText().toDouble()+10000;
+    double org_latitude = ui.textEdit_latitude->toPlainText().toDouble();
+    double org_longitude = ui.textEdit_longitude->toPlainText().toDouble();
+    double org_altitude = ui.textEdit_altitude->toPlainText().toDouble();
 
     //encode data
     QByteArray bytes;
@@ -419,24 +355,51 @@ void QtGuiApplication1::send_org_location() {
     bytes[1] = 0x0C;
     bytes[2] = 0x00;
     bytes[3] = 0x04;
+    
+    const QVector<int> latitude_result = encode(org_latitude);
+    const QVector<int> longitude_result = encode(org_longitude);
+    const QVector<int> altitude_result = encode(org_altitude);
 
-    bytes[4] = (int)org_latitude / 256;
-    bytes[5] = (int)org_latitude % 256;
-    bytes[6] = (int)((org_latitude - (int)org_latitude) * 100000 )/ 256;
-    bytes[7] = (int)((org_latitude - (int)org_latitude) * 100000 )% 256;
+    qDebug() << latitude_result.size();
+    for (int i = 0; i < latitude_result.size(); i++) {
+    
+        bytes[i + 4] = latitude_result.at(i);
+    }
+   
+    for (int i = 0; i < longitude_result.size(); i++) {
 
-    bytes[8] = (int)org_longitude / 256;
-    bytes[9] = (int)org_longitude % 256;
-    bytes[10] = (int)((org_longitude - (int)org_longitude) * 100000) / 256;
-    bytes[11] = (int)((org_longitude - (int)org_longitude) * 100000) % 256;
+        bytes[8 + i] = longitude_result.at(i);
+    }
 
-    bytes[12] = (int)org_altitude / 256;
-    bytes[13] = (int)org_altitude % 256;
-    bytes[14] = (int)((org_altitude - (int)org_altitude) * 100000) / 256;
-    bytes[15] = (int)((org_altitude - (int)org_altitude) * 100000) % 256;
+    for (int i = 0; i < altitude_result.size(); i++) {
+
+        bytes[12 + i] = altitude_result.at(i);
+   
+    }
 
     serial.write(bytes);
     qDebug() << bytes.toHex();
+}
+
+QVector<int> encode(double data) {
+    
+    int decimal = (abs(data) - abs((int)data)) * 100;
+    data += 1000000;
+    QVector<int> result;
+    result.push_back((int)data /256 / 256);
+    result.push_back((int)data /256 % 256);
+    result.push_back((int)data % 256);
+    result.push_back((int)(decimal % 256));
+
+    return result;
+}
+
+
+double decode(QVector<int>::iterator it) {
+
+    double result = (*it) * 256 * 256 + (*(it + 1)) * 256 + (*(it + 2)) - 1000000;
+    result += (result > 0 ? (double)(*(it + 3)) / 100 : - (double)(*(it + 3)) / 100);
+    return result;
 }
 
 void delay(int mSeconds)
@@ -447,26 +410,3 @@ void delay(int mSeconds)
 
 
 }
-//地图html交互相关函数
-/*
-void QtGuiApplication1::getAutocomplete(QJsonObject result)
-{
-    emit sendAutocomplete(result);
-}
-*/
-
-/*
-void QtGuiApplication1::on_searchButton_clicked()
-{}
-void QtGuiApplication1::on_openButton_clicked()
-{}
-void QtGuiApplication1::on_sendButton_clicked()
-{}
-void QtGuiApplication1::on_clearButton_clicked()
-{}
-*/
-//void uav_Pos_Info::dataChanged(const QJsonObject& jsonData)
-//{
-////    emit dataChanged(jsonData);
-//
-//}

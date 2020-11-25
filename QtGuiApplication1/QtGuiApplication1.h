@@ -21,6 +21,8 @@
 #include <QUrl>
 #include <QWebSocket>
 #include <QTimer>
+#include<QDebug>
+#include <QElapsedTimer>
 //#include <C:\Users\iusl\Desktop\QtGuiApplication1\QtGuiApplication1\uav_Pos_Info.h>
 //#include <../QtWebView/qwebview_global.h>
 
@@ -59,7 +61,6 @@ class QtGuiApplication1 : public QMainWindow
 
 public:
 	QtGuiApplication1(QWidget *parent = Q_NULLPTR);
-	inline double decode(int data1,int data2, int data3, int data4);
 public:
 	Ui::QtGuiApplication1Class ui;
 	//variables for dealing with latest received data.
@@ -82,7 +83,7 @@ private slots:
 	void uav_start();
 	void uav_exit();
 	void uav_land();
-
+	void uav_altitude_test();
 	void send_org_location();
 
 
@@ -114,6 +115,8 @@ signals:
 	*/
 };
 void delay(int mSeconds);
+QVector<int> encode(double);
+double decode(QVector<int>::iterator);
 
 //class uav_pos : public QObject
 //{

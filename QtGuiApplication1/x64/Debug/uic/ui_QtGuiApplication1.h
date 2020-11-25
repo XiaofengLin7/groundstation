@@ -26,7 +26,6 @@
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
-#include <QWebEngineView>>
 
 QT_BEGIN_NAMESPACE
 
@@ -114,10 +113,12 @@ public:
     QVBoxLayout *verticalLayout_11;
     QTextBrowser *text_uav1_vx;
     QTextBrowser *text_uav1_vy;
+    QTextEdit *text_Edit_altitude_control;
+    QPushButton *altitude_control;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
-    //QWebEngineView *Web_View;
+
     void setupUi(QMainWindow *QtGuiApplication1Class)
     {
         if (QtGuiApplication1Class->objectName().isEmpty())
@@ -127,14 +128,14 @@ public:
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         texttest = new QTextBrowser(centralWidget);
         texttest->setObjectName(QString::fromUtf8("texttest"));
-        texttest->setGeometry(QRect(720, 630, 191, 81));
+        texttest->setGeometry(QRect(730, 580, 191, 81));
         texttest->setReadOnly(false);
         pushButton_send = new QPushButton(centralWidget);
         pushButton_send->setObjectName(QString::fromUtf8("pushButton_send"));
-        pushButton_send->setGeometry(QRect(730, 480, 93, 28));
+        pushButton_send->setGeometry(QRect(740, 510, 93, 28));
         layoutWidget = new QWidget(centralWidget);
         layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 10, 601, 141));
+        layoutWidget->setGeometry(QRect(10, 10, 601, 151));
         horizontalLayout_4 = new QHBoxLayout(layoutWidget);
         horizontalLayout_4->setSpacing(6);
         horizontalLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -283,7 +284,7 @@ public:
 
         gridLayoutWidget = new QWidget(centralWidget);
         gridLayoutWidget->setObjectName(QString::fromUtf8("gridLayoutWidget"));
-        gridLayoutWidget->setGeometry(QRect(620, 300, 401, 141));
+        gridLayoutWidget->setGeometry(QRect(620, 360, 401, 131));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
@@ -336,7 +337,7 @@ public:
         text_rec->setReadOnly(true);
         verticalLayoutWidget = new QWidget(centralWidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(850, 480, 160, 135));
+        verticalLayoutWidget->setGeometry(QRect(1050, 200, 160, 135));
         verticalLayout_9 = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout_9->setSpacing(6);
         verticalLayout_9->setContentsMargins(11, 11, 11, 11);
@@ -364,7 +365,7 @@ public:
 
         verticalLayoutWidget_2 = new QWidget(centralWidget);
         verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(620, 10, 401, 271));
+        verticalLayoutWidget_2->setGeometry(QRect(620, 10, 401, 331));
         verticalLayout_14 = new QVBoxLayout(verticalLayoutWidget_2);
         verticalLayout_14->setSpacing(6);
         verticalLayout_14->setContentsMargins(11, 11, 11, 11);
@@ -558,6 +559,12 @@ public:
 
         verticalLayout_14->addLayout(horizontalLayout_8);
 
+        text_Edit_altitude_control = new QTextEdit(centralWidget);
+        text_Edit_altitude_control->setObjectName(QString::fromUtf8("text_Edit_altitude_control"));
+        text_Edit_altitude_control->setGeometry(QRect(940, 570, 141, 41));
+        altitude_control = new QPushButton(centralWidget);
+        altitude_control->setObjectName(QString::fromUtf8("altitude_control"));
+        altitude_control->setGeometry(QRect(940, 620, 141, 41));
         QtGuiApplication1Class->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(QtGuiApplication1Class);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -632,6 +639,7 @@ public:
         uav1_z->setText(QApplication::translate("QtGuiApplication1Class", "uav1_z", nullptr));
         uav1_vy->setText(QApplication::translate("QtGuiApplication1Class", "uav1_vy", nullptr));
         uav1_vx->setText(QApplication::translate("QtGuiApplication1Class", "uav1_vx", nullptr));
+        altitude_control->setText(QApplication::translate("QtGuiApplication1Class", "altitude_control", nullptr));
     } // retranslateUi
 
 };
